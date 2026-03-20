@@ -1,0 +1,12 @@
+{
+  "name": "ios-figma-demo-builder-showcase",
+  "version": "1.0.0",
+  "description": "展示页面配置文件",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve docs",
+    "build": "echo 'Static site - no build required'"
+  },
+  "author": "Project Team",
+  "license": "MIT"
+}

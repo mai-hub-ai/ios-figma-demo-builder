@@ -1,0 +1,125 @@
+# GitHub Pages 配置指南
+
+## 🚀 快速配置步骤
+
+### 1. 启用GitHub Pages
+1. 进入仓库Settings页面
+2. 找到Pages选项卡
+3. 选择Source为"main"分支
+4. 选择/docs文件夹作为根目录
+5. 点击Save
+
+### 2. 创建展示页面
+```html
+<!-- docs/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Figma Demo Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>iOS Figma Demo Builder</h1>
+        <p>现代化iOS酒店预订演示应用</p>
+    </header>
+    
+    <main>
+        <section class="features">
+            <div class="feature-card">
+                <h3>🎯 Figma CSS集成</h3>
+                <p>自动将Figma设计转换为UIKit代码</p>
+            </div>
+            <div class="feature-card">
+                <h3>🏨 智能推荐</h3>
+                <p>基于用户需求的酒店智能匹配</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎨 设计系统</h3>
+                <p>完整的原子化组件库</p>
+            </div>
+        </section>
+        
+        <section class="cta">
+            <a href="https://github.com/yourusername/ios-figma-demo-builder" class="button">查看源码</a>
+            <a href="#" class="button secondary">在线演示</a>
+        </section>
+    </main>
+</body>
+</html>
+```
+
+### 3. 添加样式文件
+```css
+/* docs/styles.css */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 3rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: 500;
+}
+
+.button.secondary {
+    background: #f0f0f0;
+    color: #333;
+}
+```
+
+## 📊 项目统计数据展示
+
+### 技术栈
+- **语言**: Swift 5.5+
+- **框架**: UIKit
+- **架构**: MVVM + Coordinator
+- **工具**: Xcode, SwiftLint
+
+### 项目规模
+- 代码行数: ~15,000行
+- 文件数量: ~250个
+- 测试覆盖率: 75%+
+- 支持平台: iOS 12.0+
+
+## 🎯 快速链接
+
+- [📖 项目文档](README.md)
+- [💻 源代码](https://github.com/yourusername/ios-figma-demo-builder)
+- [🔧 贡献指南](CONTRIBUTING.md)
+- [📊 技术展示](PROJECT_SHOWCASE.md)
