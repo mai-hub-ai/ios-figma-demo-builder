@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_14.2.app
+      
+    - name: Cache Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-xcode-${{ hashFiles('**/*.xcodeproj') }}
+        restore-keys: |
+          ${{ runner.os }}-xcode-
+      
+    - name: Build Project
+      run: |
+        xcodebuild build \
+          -project HotelBookingDemo.xcodeproj \
+          -scheme HotelBookingDemo \
+          -destination 'platform=iOS Simulator,name=iPhone 14' \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          ONLY_ACTIVE_ARCH=YES
+          
+    - name: Run Tests
+      run: |
+        xcodebuild test \
+          -project HotelBookingDemo.xcodeproj \
+          -scheme HotelBookingDemo \
+          -destination 'platform=iOS Simulator,name=iPhone 14' \
+          -enableCodeCoverage YES \
+          -resultBundlePath TestResults \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO
+          
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: TestResults
+        
+    - name: SwiftLint
+      run: |
+        if which swiftlint >/dev/null; then
+          swiftlint --strict
+        else
+          echo "warning: SwiftLint not installed, skipping linting"
+        fi
+        
+    - name: Generate Code Coverage Report
+      run: |
+        # Convert xcresult to json for coverage analysis
+        xcrun xcresulttool get --format json --path TestResults.xcresult > coverage.json
+        
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: build-artifacts
+        path: |
+          TestResults
+          coverage.json

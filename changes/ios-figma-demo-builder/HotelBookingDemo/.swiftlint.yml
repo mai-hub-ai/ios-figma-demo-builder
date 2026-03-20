@@ -1,0 +1,174 @@
+# SwiftLint Configuration for HotelBookingDemo
+# 统一的代码质量标准配置
+
+disabled_rules:
+  # 基础禁用规则
+  - discarded_notification_center_observer
+  - notification_center_detachment
+  - orphaned_doc_comment
+  - todo
+  - fallthrough
+  - line_length  # 暂时禁用行长度限制以便整合期间使用
+
+opt_in_rules:
+  # 核心推荐规则
+  - array_init
+  - attributes
+  - closure_end_indentation
+  - closure_spacing
+  - collection_alignment
+  - colon
+  - convenience_type
+  - discouraged_object_literal
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - explicit_init
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - identical_operands
+  - implicit_return
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - legacy_random
+  - literal_expression_end_indentation
+  - lower_acl_than_parent
+  - modifier_order
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_literal_brackets
+  - multiline_parameters
+  - nimble_operator
+  - nslocalizedstring_key
+  - number_separator
+  - object_literal
+  - operator_usage_whitespace
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  - prefixed_toplevel_constant
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - single_test_class
+  - sorted_first_last
+  - sorted_imports
+  - static_operator
+  - strong_iboutlet
+  - toggle_bool
+  - unavailable_function
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - Carthage
+  - Pods
+  - .build
+  - DerivedData
+  - vendor
+
+# 核心规则配置
+function_body_length:
+  warning: 100
+  error: 200
+function_parameter_count:
+  warning: 6
+  error: 8
+type_body_length:
+  warning: 300
+  error: 500
+file_length:
+  warning: 500
+  error: 1200
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+# 命名规范
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 40
+    error: 60
+  excluded:
+    - id
+    - db
+    - vc
+    - vm
+    - url
+    - key
+    - i
+    - j
+    - k
+    - x
+    - y
+    - z
+    - to
+    - at
+    - in
+
+type_name:
+  min_length:
+    warning: 3
+  max_length:
+    warning: 50
+    error: 60
+  excluded:
+    - ID
+
+# 重要规则设置
+force_cast: warning
+force_try: warning
+implicit_getter: warning
+private_over_fileprivate: warning
+
+# 自定义规则
+custom_rules:
+  # 强制使用Self关键字引用实例成员
+  prefer_self_type_over_type_of_self:
+    name: "Prefer Self Type Over Type of Self"
+    regex: '(?<!Self\.)\bSelf\b'
+    message: "Use Self instead of type(of: self)"
+    severity: warning
+
+  # 检查缺少文档注释
+  missing_docs:
+    name: "Missing Documentation"
+    regex: '^(?!.*(\/\/\/|@objc)).*(func|var|let)\s+(?!init)'
+    match_kinds:
+      - identifier
+    message: "Public declarations should be documented"
+    severity: warning
+
+  # 检查硬编码字符串
+  hardcoded_string:
+    name: "Hardcoded String"
+    regex: '"[^"\{]*"'
+    match_kinds:
+      - string
+    message: "Consider using localized strings for user-facing text"
+    severity: warning
+
+  # 检查大数字分隔符
+  large_numbers:
+    name: "Large Numbers Without Separators"
+    regex: '\d{5,}'
+    message: "Use number separators for readability (_ separator)"
+    severity: warning
+
+  # 检查TODO注释格式
+  todo_format:
+    name: "TODO Format"
+    regex: '//\s*TODO(?!\([^)]+\))'
+    message: "TODO comments should follow format: // TODO(name): description"
+    severity: warning

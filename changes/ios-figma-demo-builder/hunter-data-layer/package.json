@@ -1,0 +1,12 @@
+{
+  "name": "Hunter-HotelBooking-Data",
+  "version": "1.0.0",
+  "description": "Data layer implementation for iOS Hotel Booking demo",
+  "main": "Sources/Data/Models/HotelPackage.swift",
+  "scripts": {
+    "test": "swift test",
+    "build": "swift build"
+  },
+  "author": "Hunter",
+  "license": "MIT"
+}

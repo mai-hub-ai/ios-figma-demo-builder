@@ -1,0 +1,83 @@
+disabled_rules:
+  - line_length
+  - type_body_length
+  - function_body_length
+  - file_length
+  - cyclomatic_complexity
+
+opt_in_rules:
+  - explicit_self
+  - explicit_init
+  - redundant_nil_coalescing
+  - nimble_operator
+  - attributes
+
+included:
+  - Sources
+
+excluded:
+  - Carthage
+  - Pods
+  - Tests
+
+force_cast: warning
+force_try: warning
+function_parameter_count: 8
+large_tuple: 3
+
+identifier_name:
+  excluded:
+    - id
+    - URL
+    - url
+    - x
+    - y
+    - z
+    - to
+    - at
+    - in
+
+type_name:
+  excluded:
+    - ID
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+colon:
+  apply_to_dictionaries: false
+
+comma: error
+
+control_statement: error
+
+leading_whitespace: error
+
+legacy_constructor: warning
+
+mark: warning
+
+nesting:
+  type_level: 2
+
+opening_brace: error
+
+operator_usage_whitespace: error
+
+return_arrow_whitespace: error
+
+statement_position:
+  statement_mode: uncuddled_else
+
+todo: warning
+
+trailing_comma:
+  mandatory_comma: true
+
+trailing_newline: error
+
+trailing_semicolon: error
+
+trailing_whitespace: error
+
+syntactic_sugar: warning
