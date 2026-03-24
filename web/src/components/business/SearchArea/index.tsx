@@ -4,6 +4,7 @@ import { DatePicker } from '../DatePicker'
 import { GuestPicker, GuestPickerSheet } from '../GuestPicker'
 import { HotKeywords } from '../HotKeywords'
 import { SearchButton } from '../SearchButton'
+import { CalendarSheet } from '../CalendarSheet'
 
 interface SearchAreaProps {
   className?: string
@@ -38,6 +39,9 @@ export function SearchArea({ className = '' }: SearchAreaProps) {
 
       {/* 人数选择浮层 */}
       <GuestPickerSheet />
+
+      {/* 日历选择浮层 */}
+      <CalendarSheet />
     </div>
   )
 }
