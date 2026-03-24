@@ -15,9 +15,15 @@ export function SearchButton({ className = '' }: SearchButtonProps) {
   return (
     <button
       onClick={handleSearch}
-      className={`w-full py-3 bg-[#FFD700] text-gray-900 text-lg font-semibold rounded-lg shadow-sm active:shadow-inner transition-shadow ${className}`}
+      className={`w-full text-gray-900 font-semibold active:shadow-inner transition-shadow ${className}`}
+      style={{
+        height: 42, // Figma 84px减半
+        borderRadius: 66, // Figma 132px减半
+        backgroundColor: '#FFE033', // Figma品牌色
+        fontSize: 20, // Figma 40px减半，文案适配
+      }}
     >
-      搜索
+      搜索酒店
     </button>
   )
 }
