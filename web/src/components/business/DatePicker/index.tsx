@@ -42,12 +42,19 @@ export function DatePicker({ className = '' }: DatePickerProps) {
     >
       {/* 入住日期 - 居左 */}
       <div className="flex items-baseline gap-0.5">
-        {/* 月 - 14px */}
+        {/* 月 - 24px (大号，同日期) */}
+        <span 
+          className="text-[24px] font-normal leading-none tracking-normal"
+          style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
+        >
+          {checkInParts.month}
+        </span>
+        {/* 月字 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
-          {checkInParts.month}月
+          月
         </span>
         {/* 日 - 24px (大号) */}
         <span 
@@ -56,7 +63,7 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         >
           {checkInParts.day}
         </span>
-        {/* 日 - 14px */}
+        {/* 日字 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
@@ -88,12 +95,19 @@ export function DatePicker({ className = '' }: DatePickerProps) {
 
       {/* 离店日期 */}
       <div className="flex items-baseline gap-0.5">
-        {/* 月 - 14px */}
+        {/* 月 - 24px (大号，同日期) */}
+        <span 
+          className="text-[24px] font-normal leading-none tracking-normal"
+          style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
+        >
+          {checkOutParts.month}
+        </span>
+        {/* 月字 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
-          {checkOutParts.month}月
+          月
         </span>
         {/* 日 - 24px (大号) */}
         <span 
@@ -102,7 +116,7 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         >
           {checkOutParts.day}
         </span>
-        {/* 日 - 14px */}
+        {/* 日字 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
