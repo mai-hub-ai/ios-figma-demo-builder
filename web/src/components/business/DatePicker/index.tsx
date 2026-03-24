@@ -42,19 +42,26 @@ export function DatePicker({ className = '' }: DatePickerProps) {
     >
       {/* 入住日期 - 居左 */}
       <div className="flex items-baseline gap-0.5">
-        {/* 大号日期数字 - Figma 48pt 适配 iPhone 16 Pro 使用 24px */}
+        {/* 月 - 14px */}
+        <span 
+          className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
+          style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
+        >
+          {checkInParts.month}月
+        </span>
+        {/* 日 - 24px (大号) */}
         <span 
           className="text-[24px] font-normal leading-none tracking-normal"
           style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
         >
           {checkInParts.day}
         </span>
-        {/* 月日文案 - Figma 28pt 适配为 14px */}
+        {/* 日 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
-          {checkInParts.month}月
+          日
         </span>
         {/* 今天/明天标签 - 灰色 */}
         {checkInLabel && (
@@ -81,19 +88,26 @@ export function DatePicker({ className = '' }: DatePickerProps) {
 
       {/* 离店日期 */}
       <div className="flex items-baseline gap-0.5">
-        {/* 大号日期数字 */}
+        {/* 月 - 14px */}
+        <span 
+          className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
+          style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
+        >
+          {checkOutParts.month}月
+        </span>
+        {/* 日 - 24px (大号) */}
         <span 
           className="text-[24px] font-normal leading-none tracking-normal"
           style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
         >
           {checkOutParts.day}
         </span>
-        {/* 月日文案 */}
+        {/* 日 - 14px */}
         <span 
           className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
-          {checkOutParts.month}月
+          日
         </span>
         {/* 今天/明天标签 - 灰色 */}
         {checkOutLabel && (
