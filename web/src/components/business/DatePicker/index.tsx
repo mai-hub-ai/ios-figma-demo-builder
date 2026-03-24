@@ -38,20 +38,20 @@ export function DatePicker({ className = '' }: DatePickerProps) {
   return (
     <button 
       onClick={openCalendar}
-      className={`flex items-center w-full bg-white rounded-lg border border-gray-200 px-4 py-3 ${className}`}
+      className={`flex items-center w-full bg-white rounded-lg border border-gray-200 px-3 py-2 ${className}`}
     >
       {/* 入住日期 - 居左 */}
-      <div className="flex items-baseline gap-1">
-        {/* 大号日期数字 */}
+      <div className="flex items-baseline gap-0.5">
+        {/* 大号日期数字 - Figma 48pt 适配 iPhone 16 Pro 使用 24px */}
         <span 
-          className="text-[48px] font-normal leading-none tracking-normal"
+          className="text-[24px] font-normal leading-none tracking-normal"
           style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
         >
           {checkInParts.day}
         </span>
-        {/* 月日文案 */}
+        {/* 月日文案 - Figma 28pt 适配为 14px */}
         <span 
-          className="text-[28px] font-normal leading-[140%] tracking-normal text-gray-900"
+          className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
           {checkInParts.month}月
@@ -59,7 +59,7 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         {/* 今天/明天标签 - 灰色 */}
         {checkInLabel && (
           <span 
-            className="text-[28px] font-normal leading-[140%] tracking-normal text-gray-400 ml-1"
+            className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-400 ml-0.5"
             style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
           >
             {checkInLabel}
@@ -69,9 +69,9 @@ export function DatePicker({ className = '' }: DatePickerProps) {
 
       {/* 间隔晚数 - 纯展示，不可点击 */}
       <div className="flex items-center justify-center flex-1">
-        <div className="flex items-center gap-1 px-4">
+        <div className="flex items-center gap-1 px-2">
           <span 
-            className="text-[28px] font-normal leading-[140%] tracking-normal text-gray-500"
+            className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-500"
             style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
           >
             {nightCount}晚
@@ -80,17 +80,17 @@ export function DatePicker({ className = '' }: DatePickerProps) {
       </div>
 
       {/* 离店日期 */}
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-baseline gap-0.5">
         {/* 大号日期数字 */}
         <span 
-          className="text-[48px] font-normal leading-none tracking-normal"
+          className="text-[24px] font-normal leading-none tracking-normal"
           style={{ fontFamily: 'Fliggy Sans 102, -apple-system, sans-serif' }}
         >
           {checkOutParts.day}
         </span>
         {/* 月日文案 */}
         <span 
-          className="text-[28px] font-normal leading-[140%] tracking-normal text-gray-900"
+          className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-900"
           style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
         >
           {checkOutParts.month}月
@@ -98,7 +98,7 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         {/* 今天/明天标签 - 灰色 */}
         {checkOutLabel && (
           <span 
-            className="text-[28px] font-normal leading-[140%] tracking-normal text-gray-400 ml-1"
+            className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-400 ml-0.5"
             style={{ fontFamily: 'PingFang SC, -apple-system, sans-serif' }}
           >
             {checkOutLabel}
