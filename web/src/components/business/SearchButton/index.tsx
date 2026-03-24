@@ -20,7 +20,7 @@ export function SearchButton({ className = '' }: SearchButtonProps) {
         height: 42, // Figma 84px减半
         borderRadius: 66, // Figma 132px减半
         backgroundColor: '#FFE033', // Figma品牌色
-        fontSize: 20, // Figma 40px减半，文案适配
+        fontSize: 15, // 调整为15px
       }}
     >
       搜索酒店
