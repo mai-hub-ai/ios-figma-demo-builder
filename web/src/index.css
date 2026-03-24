@@ -2,28 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables */
 :root {
-  --fliggy-primary: #FF8800;
-  --fliggy-primary-light: #FFF5E6;
-  --fliggy-text: #333333;
-  --fliggy-text-secondary: #666666;
-  --fliggy-text-hint: #999999;
-  --fliggy-border: #EEEEEE;
-  --fliggy-bg: #F5F5F5;
-  --safe-area-top: env(safe-area-inset-top);
-  --safe-area-bottom: env(safe-area-inset-bottom);
+  --fliggy-primary: #1A73E8;
+  --fliggy-secondary: #34A853;
+  --fliggy-bg: #F2F2F7;
+  --fliggy-text: #202124;
+  --fliggy-text-secondary: #5F6368;
 }
 
+/* Base Styles */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue',
-    'Microsoft YaHei', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: var(--fliggy-text);
@@ -42,12 +37,29 @@ html, body {
   overflow-x: hidden;
 }
 
-/* iOS safe area padding */
-@supports (padding-top: env(safe-area-inset-top)) {
-  .safe-area-top {
-    padding-top: env(safe-area-inset-top);
-  }
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+/* iOS safe area utility classes */
+.h-safe-top {
+  height: env(safe-area-inset-top);
+}
+
+.h-safe-bottom {
+  height: env(safe-area-inset-bottom);
+}
+
+.pt-safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pb-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Hide scrollbar for horizontal scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
