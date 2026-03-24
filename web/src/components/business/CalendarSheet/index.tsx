@@ -19,6 +19,14 @@ export function CalendarSheet() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const selectedDateRef = useRef<HTMLButtonElement>(null)
 
+  // 获取昨天日期（用于禁用历史日期）
+  const getYesterday = () => {
+    const yesterday = new Date()
+    yesterday.setHours(0, 0, 0, 0)
+    yesterday.setDate(yesterday.getDate() - 1)
+    return yesterday
+  }
+
   // 打开浮层时同步当前日期，并滚动到选中日期
   useEffect(() => {
     if (isCalendarOpen) {
@@ -62,20 +70,18 @@ export function CalendarSheet() {
     return date > start && date < end
   }
 
-  // 判断日期是否是入住日期（较早的）
-  const isCheckIn = (dateStr: string) => {
-    if (!firstSelected || !secondSelected) return false
-    return dateStr === firstSelected
-  }
-
-  // 判断日期是否是离店日期（较晚的）
-  const isCheckOut = (dateStr: string) => {
-    if (!firstSelected || !secondSelected) return false
-    return dateStr === secondSelected
+  // 判断日期是否是历史日期（昨天及之前）
+  const isHistoryDate = (dateStr: string) => {
+    const date = new Date(dateStr)
+    date.setHours(0, 0, 0, 0)
+    return date <= getYesterday()
   }
 
   // 处理日期点击 - 自由选择两个日期
   const handleDateClick = (dateStr: string) => {
+    // 历史日期不可选
+    if (isHistoryDate(dateStr)) return
+
     // 如果点击的是已选中的日期，取消选择
     if (dateStr === firstSelected) {
       setFirstSelected(null)
@@ -229,8 +235,7 @@ export function CalendarSheet() {
                 {monthData.days.map((day) => {
                   const selected = isSelected(day.date)
                   const inRange = isInRange(day.date)
-                  const isCheckInDate = isCheckIn(day.date)
-                  const isCheckOutDate = isCheckOut(day.date)
+                  const isHistory = isHistoryDate(day.date)
                   const label = getDateLabel(day.date)
                   
                   return (
@@ -238,28 +243,19 @@ export function CalendarSheet() {
                       key={day.date}
                       ref={selected ? selectedDateRef : null}
                       onClick={() => handleDateClick(day.date)}
+                      disabled={isHistory}
                       className={`
                         relative aspect-square flex flex-col items-center justify-center rounded-lg text-base
+                        ${isHistory ? 'text-gray-300 cursor-not-allowed' : ''}
                         ${selected ? 'bg-primary text-white' : ''}
                         ${inRange ? 'bg-primary/10 text-primary' : ''}
-                        ${!selected && !inRange ? 'text-gray-900 hover:bg-gray-100' : ''}
+                        ${!selected && !inRange && !isHistory ? 'text-gray-900 hover:bg-gray-100' : ''}
                       `}
                     >
                       <span className="font-medium text-base">{new Date(day.date).getDate()}</span>
                       {label && (
-                        <span className={`text-xs ${selected ? 'text-white/80' : 'text-gray-400'}`}>
+                        <span className={`text-xs ${selected ? 'text-white/80' : isHistory ? 'text-gray-300' : 'text-gray-400'}`}>
                           {label}
-                        </span>
-                      )}
-                      {/* 入住/离店标记 */}
-                      {isCheckInDate && (
-                        <span className="absolute -bottom-1 text-[8px] text-primary bg-white px-1 rounded">
-                          入住
-                        </span>
-                      )}
-                      {isCheckOutDate && (
-                        <span className="absolute -bottom-1 text-[8px] text-primary bg-white px-1 rounded">
-                          离店
                         </span>
                       )}
                     </button>
