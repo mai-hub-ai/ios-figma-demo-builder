@@ -4,6 +4,9 @@ interface GuestPickerProps {
   className?: string
 }
 
+// 飞猪品牌色
+const brandColor = '#FFE033'
+
 export function GuestPicker({ className = '' }: GuestPickerProps) {
   const { roomCount, adultCount, childCount, openGuestPicker } = useSearchStore()
 
@@ -35,7 +38,7 @@ export function GuestPicker({ className = '' }: GuestPickerProps) {
   )
 }
 
-// 人数选择浮层组件
+// 人数选择浮层组件 - 高度自适应
 export function GuestPickerSheet() {
   const { 
     roomCount, 
@@ -60,7 +63,8 @@ export function GuestPickerSheet() {
   return (
     <div className="fixed inset-0 z-50 bg-black/50" onClick={closeGuestPicker}>
       <div 
-        className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl h-[60vh] flex flex-col"
+        className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl flex flex-col"
+        style={{ maxHeight: '70vh' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 标题栏 */}
@@ -75,7 +79,7 @@ export function GuestPickerSheet() {
 
         {/* 房间数 */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <span className="text-base text-gray-900" style={{ fontSize: 16 }}>房间数</span>
+          <span className="text-gray-900" style={{ fontSize: 16 }}>房间数</span>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => updateCount('room', -1)}
@@ -89,7 +93,8 @@ export function GuestPickerSheet() {
             <span className="font-medium w-10 text-center" style={{ fontSize: 18 }}>{roomCount}</span>
             <button 
               onClick={() => updateCount('room', 1)}
-              className="w-10 h-10 rounded-full border border-primary text-primary flex items-center justify-center"
+              className="w-10 h-10 rounded-full border flex items-center justify-center"
+              style={{ borderColor: brandColor, color: '#202124' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -100,7 +105,7 @@ export function GuestPickerSheet() {
 
         {/* 成人数 */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <span className="text-base text-gray-900" style={{ fontSize: 16 }}>成人数</span>
+          <span className="text-gray-900" style={{ fontSize: 16 }}>成人数</span>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => updateCount('adult', -1)}
@@ -114,7 +119,8 @@ export function GuestPickerSheet() {
             <span className="font-medium w-10 text-center" style={{ fontSize: 18 }}>{adultCount}</span>
             <button 
               onClick={() => updateCount('adult', 1)}
-              className="w-10 h-10 rounded-full border border-primary text-primary flex items-center justify-center"
+              className="w-10 h-10 rounded-full border flex items-center justify-center"
+              style={{ borderColor: brandColor, color: '#202124' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -125,7 +131,7 @@ export function GuestPickerSheet() {
 
         {/* 儿童数 */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <span className="text-base text-gray-900" style={{ fontSize: 16 }}>儿童数</span>
+          <span className="text-gray-900" style={{ fontSize: 16 }}>儿童数</span>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => updateCount('child', -1)}
@@ -139,7 +145,8 @@ export function GuestPickerSheet() {
             <span className="font-medium w-10 text-center" style={{ fontSize: 18 }}>{childCount}</span>
             <button 
               onClick={() => updateCount('child', 1)}
-              className="w-10 h-10 rounded-full border border-primary text-primary flex items-center justify-center"
+              className="w-10 h-10 rounded-full border flex items-center justify-center"
+              style={{ borderColor: brandColor, color: '#202124' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -148,11 +155,12 @@ export function GuestPickerSheet() {
           </div>
         </div>
 
-        {/* 确认按钮 */}
+        {/* 确认按钮 - 底部安全距离 */}
         <div className="p-4 pb-safe-bottom flex-shrink-0">
           <button
             onClick={closeGuestPicker}
-            className="w-full py-3 bg-primary text-white rounded-lg font-medium text-lg"
+            className="w-full py-3 rounded-lg font-medium text-lg"
+            style={{ backgroundColor: brandColor, color: '#202124' }}
           >
             确认
           </button>

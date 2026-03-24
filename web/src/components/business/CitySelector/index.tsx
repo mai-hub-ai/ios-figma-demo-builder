@@ -6,6 +6,10 @@ interface CitySelectorProps {
   className?: string
 }
 
+// 飞猪品牌色
+const brandColor = '#FFE033'
+const brandLight = '#FFF5B3'
+
 export function CitySelector({ className = '' }: CitySelectorProps) {
   const { selectedCity, hotCities, cityList, isCitySelectorOpen, openCitySelector, closeCitySelector, setSelectedCity } = useSearchStore()
   const [searchText, setSearchText] = useState('')
@@ -131,7 +135,8 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder="搜索城市"
                 autoFocus
-                className="w-full px-4 py-3 bg-gray-50 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full px-4 py-3 bg-gray-50 rounded-lg text-base focus:outline-none focus:ring-2"
+                style={{ '--tw-ring-color': brandColor } as React.CSSProperties}
               />
             </div>
 
@@ -151,11 +156,11 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
                         <button
                           key={city.cityCode}
                           onClick={() => handleSelectCity(city)}
-                          className={`px-3 py-3 text-base rounded-lg transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
-                            selectedCity?.cityCode === city.cityCode
-                              ? 'bg-primary text-white'
-                              : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                          }`}
+                          className="px-3 py-3 text-base rounded-lg transition-colors whitespace-nowrap overflow-hidden text-ellipsis"
+                          style={{
+                            backgroundColor: selectedCity?.cityCode === city.cityCode ? brandColor : '#F3F4F6',
+                            color: selectedCity?.cityCode === city.cityCode ? '#202124' : '#374151',
+                          }}
                           title={city.cityName}
                         >
                           {city.cityName}
@@ -174,11 +179,11 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
                         <button
                           key={city.cityCode}
                           onClick={() => handleSelectCity(city)}
-                          className={`w-full text-left px-4 py-3 text-base rounded-lg transition-colors ${
-                            selectedCity?.cityCode === city.cityCode
-                              ? 'bg-primary text-white'
-                              : 'text-gray-700 hover:bg-gray-50'
-                          }`}
+                          className="w-full text-left px-4 py-3 text-base rounded-lg transition-colors"
+                          style={{
+                            backgroundColor: selectedCity?.cityCode === city.cityCode ? brandColor : 'transparent',
+                            color: selectedCity?.cityCode === city.cityCode ? '#202124' : '#374151',
+                          }}
                         >
                           {city.cityName}
                         </button>
@@ -195,7 +200,10 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
                     <button
                       key={letter}
                       onClick={() => scrollToLetter(letter)}
-                      className="w-6 h-6 flex items-center justify-center text-xs text-gray-400 hover:text-primary transition-colors"
+                      className="w-6 h-6 flex items-center justify-center text-xs transition-colors"
+                      style={{ color: '#9CA3AF' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = brandColor)}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
                     >
                       {letter}
                     </button>

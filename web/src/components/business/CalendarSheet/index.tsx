@@ -169,6 +169,10 @@ export function CalendarSheet() {
     ? [firstSelected, secondSelected].sort()[1]
     : secondSelected || checkOutDate
 
+  // 飞猪品牌色
+  const brandColor = '#FFE033'
+  const brandLight = '#FFF5B3'
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50" onClick={closeCalendar}>
       <div 
@@ -185,11 +189,14 @@ export function CalendarSheet() {
           </button>
         </div>
 
-        {/* 已选日期展示 - 自动解析入住/离店 */}
+        {/* 已选日期展示 */}
         <div className="flex items-center justify-between px-6 py-4 bg-gray-50 flex-shrink-0">
           <div className="text-center">
             <div className="text-sm text-gray-500 mb-1">入住</div>
-            <div className="text-xl font-medium text-primary">
+            <div 
+              className="text-xl font-medium"
+              style={{ color: brandColor }}
+            >
               {formatDisplayDate(checkInStr)}
             </div>
             <div className="text-sm text-gray-400">{checkInStr ? getDateLabel(checkInStr) : ''}</div>
@@ -201,7 +208,10 @@ export function CalendarSheet() {
           
           <div className="text-center">
             <div className="text-sm text-gray-500 mb-1">离店</div>
-            <div className="text-xl font-medium text-primary">
+            <div 
+              className="text-xl font-medium"
+              style={{ color: brandColor }}
+            >
               {formatDisplayDate(checkOutStr)}
             </div>
             <div className="text-sm text-gray-400">{checkOutStr ? getDateLabel(checkOutStr) : ''}</div>
@@ -244,17 +254,21 @@ export function CalendarSheet() {
                       ref={selected ? selectedDateRef : null}
                       onClick={() => handleDateClick(day.date)}
                       disabled={isHistory}
-                      className={`
-                        relative aspect-square flex flex-col items-center justify-center rounded-lg text-base
-                        ${isHistory ? 'text-gray-300 cursor-not-allowed' : ''}
-                        ${selected ? 'bg-primary text-white' : ''}
-                        ${inRange ? 'bg-primary/10 text-primary' : ''}
-                        ${!selected && !inRange && !isHistory ? 'text-gray-900 hover:bg-gray-100' : ''}
-                      `}
+                      className="relative aspect-square flex flex-col items-center justify-center rounded-lg text-base"
+                      style={{
+                        color: isHistory ? '#D1D5DB' : selected ? '#202124' : inRange ? '#202124' : '#111827',
+                        backgroundColor: selected ? brandColor : inRange ? brandLight : 'transparent',
+                        opacity: isHistory ? 0.5 : 1,
+                      }}
                     >
                       <span className="font-medium text-base">{new Date(day.date).getDate()}</span>
                       {label && (
-                        <span className={`text-xs ${selected ? 'text-white/80' : isHistory ? 'text-gray-300' : 'text-gray-400'}`}>
+                        <span 
+                          className="text-xs"
+                          style={{ 
+                            color: selected ? 'rgba(32, 33, 36, 0.7)' : isHistory ? '#D1D5DB' : '#9CA3AF' 
+                          }}
+                        >
                           {label}
                         </span>
                       )}
@@ -270,7 +284,8 @@ export function CalendarSheet() {
         <div className="p-4 pb-safe-bottom border-t border-gray-100 bg-white flex-shrink-0">
           <button
             onClick={handleConfirm}
-            className="w-full py-3 bg-primary text-white rounded-lg font-medium text-lg"
+            className="w-full py-3 rounded-lg font-medium text-lg"
+            style={{ backgroundColor: brandColor, color: '#202124' }}
           >
             确认
           </button>

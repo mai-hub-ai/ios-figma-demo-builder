@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#1A73E8',
+        // 飞猪品牌色
+        primary: '#FFE033',
+        'primary-dark': '#F5D600',
+        'primary-light': '#FFF5B3',
         secondary: '#34A853',
         background: '#F2F2F7',
         surface: '#FFFFFF',
@@ -16,7 +19,7 @@ export default {
         error: '#EA4335',
         // 商业转化色彩
         cta: {
-          primary: '#FFD700',
+          primary: '#FFE033',
           secondary: '#FF4500',
         },
         // 文本色彩
@@ -30,7 +33,7 @@ export default {
           available: '#34A853',
           limited: '#FBBC05',
           soldOut: '#EA4335',
-          selected: '#4285F4',
+          selected: '#FFE033',
         },
       },
       spacing: {
