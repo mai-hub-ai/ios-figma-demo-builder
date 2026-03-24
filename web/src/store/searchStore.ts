@@ -7,7 +7,7 @@ import type {
   SearchParams,
   SearchPageInitData 
 } from '@/types'
-import { fetchSearchPageInit, fetchCalendar } from '@/services/searchApi'
+import { fetchSearchPageInit, fetchCalendar, fetchCities } from '@/services/searchApi'
 
 interface SearchState {
   // === 搜索条件 ===
@@ -41,8 +41,7 @@ interface SearchState {
   setKeyword: (keyword: string) => void;
   setDateRange: (checkIn: string, checkOut: string) => void;
   setGuestInfo: (rooms: number, adults: number, children: number) => void;
-  
-  openCitySelector: () => void;
+  openCitySelector: () => Promise<void>;
   closeCitySelector: () => void;
   openCalendar: () => Promise<void>;
   closeCalendar: () => void;
@@ -60,7 +59,6 @@ const getDefaultDates = () => {
   tomorrow.setDate(tomorrow.getDate() + 1)
   
   const formatDate = (d: Date) => d.toISOString().split('T')[0]
-  
   return {
     checkIn: formatDate(today),
     checkOut: formatDate(tomorrow),
@@ -118,7 +116,6 @@ export const useSearchStore = create<SearchState>()(
       },
 
       setSelectedCity: (city) => set({ selectedCity: city }),
-      
       setKeyword: (keyword) => set({ keyword }),
       
       setDateRange: (checkIn, checkOut) => {
@@ -134,7 +131,20 @@ export const useSearchStore = create<SearchState>()(
         childCount: children,
       }),
 
-      openCitySelector: () => set({ isCitySelectorOpen: true }),
+      openCitySelector: async () => {
+        set({ isCitySelectorOpen: true, loading: true })
+        try {
+          // 加载所有城市列表
+          const res = await fetchCities()
+          set({ 
+            cityList: res.data.cities,
+            hotCities: res.data.hotCities,
+            loading: false 
+          })
+        } catch {
+          set({ loading: false })
+        }
+      },
       closeCitySelector: () => set({ isCitySelectorOpen: false }),
       
       openCalendar: async () => {
@@ -148,7 +158,7 @@ export const useSearchStore = create<SearchState>()(
         }
       },
       closeCalendar: () => set({ isCalendarOpen: false }),
-
+      
       openGuestPicker: () => set({ isGuestPickerOpen: true }),
       closeGuestPicker: () => set({ isGuestPickerOpen: false }),
 
