@@ -14,12 +14,15 @@ export function CalendarSheet() {
   // 本地状态用于浮层内的选择
   const [tempCheckIn, setTempCheckIn] = useState(checkInDate)
   const [tempCheckOut, setTempCheckOut] = useState(checkOutDate)
+  // 记录上次点击的是哪个端点，用于智能判断
+  const [lastSelected, setLastSelected] = useState<'checkIn' | 'checkOut'>('checkIn')
 
   // 打开浮层时同步当前日期
   useEffect(() => {
     if (isCalendarOpen) {
       setTempCheckIn(checkInDate)
       setTempCheckOut(checkOutDate)
+      setLastSelected('checkIn')
     }
   }, [isCalendarOpen, checkInDate, checkOutDate])
 
@@ -48,14 +51,15 @@ export function CalendarSheet() {
     const currentCheckIn = new Date(tempCheckIn)
     const currentCheckOut = new Date(tempCheckOut)
 
-    // 如果点击的是当前选中的入住日期，取消选择
+    // 如果点击的是当前选中的入住日期，切换到选择离店日期模式
     if (dateStr === tempCheckIn) {
-      // 保持现状，或者可以清空
+      setLastSelected('checkOut')
       return
     }
 
-    // 如果点击的是当前选中的离店日期，取消选择
+    // 如果点击的是当前选中的离店日期，切换到选择入住日期模式
     if (dateStr === tempCheckOut) {
+      setLastSelected('checkIn')
       return
     }
 
@@ -63,20 +67,26 @@ export function CalendarSheet() {
     if (clickedDate < currentCheckIn) {
       // 点击的日期在当前入住日期之前，设为新的入住日期
       setTempCheckIn(dateStr)
+      setLastSelected('checkIn')
     } else if (clickedDate > currentCheckOut) {
       // 点击的日期在当前离店日期之后，设为新的离店日期
       setTempCheckOut(dateStr)
+      setLastSelected('checkOut')
     } else {
-      // 点击的日期在当前区间内，根据距离判断替换哪个
-      const distToCheckIn = clickedDate.getTime() - currentCheckIn.getTime()
-      const distToCheckOut = currentCheckOut.getTime() - clickedDate.getTime()
-      
-      if (distToCheckIn < distToCheckOut) {
-        // 离入住日期更近，替换入住日期
-        setTempCheckIn(dateStr)
+      // 点击的日期在当前区间内
+      // 根据上次选择的行为智能判断
+      if (lastSelected === 'checkIn') {
+        // 上次选了入住，这次选离店（但要在入住之后）
+        if (clickedDate > currentCheckIn) {
+          setTempCheckOut(dateStr)
+          setLastSelected('checkOut')
+        }
       } else {
-        // 离离店日期更近，替换离店日期
-        setTempCheckOut(dateStr)
+        // 上次选了离店，这次选入住（但要在离店之前）
+        if (clickedDate < currentCheckOut) {
+          setTempCheckIn(dateStr)
+          setLastSelected('checkIn')
+        }
       }
     }
   }
@@ -134,9 +144,12 @@ export function CalendarSheet() {
 
         {/* 已选日期展示 */}
         <div className="flex items-center justify-between px-6 py-4 bg-gray-50 flex-shrink-0">
-          <div className="text-center">
+          <div 
+            className="text-center cursor-pointer"
+            onClick={() => setLastSelected('checkIn')}
+          >
             <div className="text-sm text-gray-500 mb-1">入住</div>
-            <div className="text-xl font-medium text-gray-900">
+            <div className={`text-xl font-medium ${lastSelected === 'checkIn' ? 'text-primary' : 'text-gray-900'}`}>
               {formatDisplayDate(tempCheckIn)}
             </div>
             <div className="text-sm text-gray-400">{getDateLabel(tempCheckIn)}</div>
@@ -146,9 +159,12 @@ export function CalendarSheet() {
             <div className="text-base text-gray-500">共{tempNightCount}晚</div>
           </div>
           
-          <div className="text-center">
+          <div 
+            className="text-center cursor-pointer"
+            onClick={() => setLastSelected('checkOut')}
+          >
             <div className="text-sm text-gray-500 mb-1">离店</div>
-            <div className="text-xl font-medium text-gray-900">
+            <div className={`text-xl font-medium ${lastSelected === 'checkOut' ? 'text-primary' : 'text-gray-900'}`}>
               {formatDisplayDate(tempCheckOut)}
             </div>
             <div className="text-sm text-gray-400">{getDateLabel(tempCheckOut)}</div>
