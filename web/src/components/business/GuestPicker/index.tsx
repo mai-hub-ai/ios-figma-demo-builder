@@ -13,7 +13,7 @@ export function GuestPicker({ className = '' }: GuestPickerProps) {
   return (
     <button
       onClick={openGuestPicker}
-      className={`flex items-center justify-between w-full px-3 ${className}`}
+      className={`flex items-center justify-between w-full ${className}`}
       style={{ height: 42 }}
     >
       {/* 人数显示 - 字号按经验适配，始终显示儿童数 */}
