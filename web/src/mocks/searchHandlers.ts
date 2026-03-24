@@ -43,6 +43,8 @@ const generateHotKeywords = (): HotKeyword[] => [
 const generateCalendarData = (months: number): CalendarMonth[] => {
   const result: CalendarMonth[] = []
   const today = new Date()
+  // 将today设为当天0点，确保比较正确
+  today.setHours(0, 0, 0, 0)
   
   for (let m = 0; m < months; m++) {
     const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1)
@@ -54,12 +56,18 @@ const generateCalendarData = (months: number): CalendarMonth[] => {
     
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month - 1, d)
+      // 将date也设为0点进行比较
+      date.setHours(0, 0, 0, 0)
       const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`
       
-      const isToday = dateStr === today.toISOString().split('T')[0]
-      const tomorrow = new Date(today)
+      const todayZero = new Date(today)
+      todayZero.setHours(0, 0, 0, 0)
+      
+      const isToday = date.getTime() === todayZero.getTime()
+      
+      const tomorrow = new Date(todayZero)
       tomorrow.setDate(tomorrow.getDate() + 1)
-      const isTomorrow = dateStr === tomorrow.toISOString().split('T')[0]
+      const isTomorrow = date.getTime() === tomorrow.getTime()
       
       const dayOfWeek = date.getDay()
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
@@ -74,7 +82,7 @@ const generateCalendarData = (months: number): CalendarMonth[] => {
       days.push({
         date: dateStr,
         price: basePrice + weekendSurcharge,
-        available: date >= today,
+        available: date >= todayZero, // 今天及之后都可用
         label,
         isHoliday: false,
         holidayName: '',
@@ -93,7 +101,6 @@ export const searchHandlers = [
     await delay(300)
     const url = new URL(request.url)
     const cityCode = url.searchParams.get('cityCode') || 'SHA'
-    
     const currentCity = hotCities.find(c => c.cityCode === cityCode) || hotCities[0]
     
     const today = new Date()
@@ -135,7 +142,6 @@ export const searchHandlers = [
     await delay(300)
     const url = new URL(request.url)
     const months = parseInt(url.searchParams.get('months') || '3')
-    
     return HttpResponse.json({
       code: 0,
       message: 'success',
