@@ -79,21 +79,28 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
     }
   }, [isCitySelectorOpen, cityList.length])
 
+  // 截断城市名（超过5个字）
+  const truncateCityName = (name: string) => {
+    if (name.length <= 5) return name
+    return name.slice(0, 5) + '...'
+  }
+
   return (
-    <div className={`relative ${className}`}>
-      {/* 城市选择器触发器 - 删除左侧icon，调整字号 */}
+    <div className={`relative flex-shrink-0 ${className}`}>
+      {/* 城市选择器触发器 - 宽度自适应，文字不换行 */}
       <button
         onClick={openCitySelector}
-        className="flex items-center gap-1 px-3 py-2 bg-white rounded-lg border border-gray-200"
-        style={{ width: 72, height: 50 }}
+        className="flex items-center gap-1 px-3 py-2 bg-white rounded-lg border border-gray-200 whitespace-nowrap"
+        style={{ height: 50 }}
       >
         <span 
-          className="font-medium text-gray-900"
-          style={{ fontSize: 18 }} // Figma字号减半适配
+          className="font-medium text-gray-900 truncate"
+          style={{ fontSize: 18, maxWidth: 120 }} // 放宽宽度，最大120px，超出截断
+          title={selectedCity?.cityName}
         >
-          {selectedCity?.cityName || '选择'}
+          {truncateCityName(selectedCity?.cityName || '选择')}
         </span>
-        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -144,11 +151,12 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
                         <button
                           key={city.cityCode}
                           onClick={() => handleSelectCity(city)}
-                          className={`px-3 py-3 text-base rounded-lg transition-colors ${
+                          className={`px-3 py-3 text-base rounded-lg transition-colors whitespace-nowrap overflow-hidden text-ellipsis ${
                             selectedCity?.cityCode === city.cityCode
                               ? 'bg-primary text-white'
                               : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                           }`}
+                          title={city.cityName}
                         >
                           {city.cityName}
                         </button>
