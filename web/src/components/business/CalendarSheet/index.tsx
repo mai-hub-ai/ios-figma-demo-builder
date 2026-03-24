@@ -14,31 +14,25 @@ export function CalendarSheet() {
   // 本地状态用于浮层内的选择
   const [tempCheckIn, setTempCheckIn] = useState(checkInDate)
   const [tempCheckOut, setTempCheckOut] = useState(checkOutDate)
-  const [selecting, setSelecting] = useState<'checkIn' | 'checkOut'>('checkIn')
 
   // 打开浮层时同步当前日期
   useEffect(() => {
     if (isCalendarOpen) {
       setTempCheckIn(checkInDate)
       setTempCheckOut(checkOutDate)
-      setSelecting('checkIn')
     }
   }, [isCalendarOpen, checkInDate, checkOutDate])
 
   if (!isCalendarOpen) return null
 
   // 计算临时选择的晚数
-  const tempNightCount = Math.round(
+  const tempNightCount = Math.max(1, Math.round(
     (new Date(tempCheckOut).getTime() - new Date(tempCheckIn).getTime()) / (1000 * 60 * 60 * 24)
-  )
+  ))
 
   // 判断日期是否被选中
-  const isSelected = (dateStr: string) => {
-    if (selecting === 'checkIn') {
-      return dateStr === tempCheckIn
-    }
-    return dateStr === tempCheckOut
-  }
+  const isCheckInSelected = (dateStr: string) => dateStr === tempCheckIn
+  const isCheckOutSelected = (dateStr: string) => dateStr === tempCheckOut
 
   // 判断日期是否在选中的区间内
   const isInRange = (dateStr: string) => {
@@ -48,24 +42,40 @@ export function CalendarSheet() {
     return date > start && date < end
   }
 
-  // 处理日期点击
+  // 处理日期点击 - 支持任意顺序选择
   const handleDateClick = (dateStr: string) => {
-    if (selecting === 'checkIn') {
+    const clickedDate = new Date(dateStr)
+    const currentCheckIn = new Date(tempCheckIn)
+    const currentCheckOut = new Date(tempCheckOut)
+
+    // 如果点击的是当前选中的入住日期，取消选择
+    if (dateStr === tempCheckIn) {
+      // 保持现状，或者可以清空
+      return
+    }
+
+    // 如果点击的是当前选中的离店日期，取消选择
+    if (dateStr === tempCheckOut) {
+      return
+    }
+
+    // 判断点击日期与当前区间的位置关系
+    if (clickedDate < currentCheckIn) {
+      // 点击的日期在当前入住日期之前，设为新的入住日期
       setTempCheckIn(dateStr)
-      // 如果新选择的入住日期晚于当前离店日期，自动调整离店日期
-      const newCheckIn = new Date(dateStr)
-      const currentCheckOut = new Date(tempCheckOut)
-      if (newCheckIn >= currentCheckOut) {
-        const nextDay = new Date(newCheckIn)
-        nextDay.setDate(nextDay.getDate() + 1)
-        setTempCheckOut(nextDay.toISOString().split('T')[0])
-      }
-      setSelecting('checkOut')
+    } else if (clickedDate > currentCheckOut) {
+      // 点击的日期在当前离店日期之后，设为新的离店日期
+      setTempCheckOut(dateStr)
     } else {
-      const newCheckOut = new Date(dateStr)
-      const currentCheckIn = new Date(tempCheckIn)
-      // 离店日期必须晚于入住日期
-      if (newCheckOut > currentCheckIn) {
+      // 点击的日期在当前区间内，根据距离判断替换哪个
+      const distToCheckIn = clickedDate.getTime() - currentCheckIn.getTime()
+      const distToCheckOut = currentCheckOut.getTime() - clickedDate.getTime()
+      
+      if (distToCheckIn < distToCheckOut) {
+        // 离入住日期更近，替换入住日期
+        setTempCheckIn(dateStr)
+      } else {
+        // 离离店日期更近，替换离店日期
         setTempCheckOut(dateStr)
       }
     }
@@ -73,7 +83,16 @@ export function CalendarSheet() {
 
   // 确认选择
   const handleConfirm = () => {
-    setDateRange(tempCheckIn, tempCheckOut)
+    // 确保入住日期早于离店日期
+    const checkIn = new Date(tempCheckIn)
+    const checkOut = new Date(tempCheckOut)
+    
+    if (checkIn >= checkOut) {
+      // 如果顺序反了，交换
+      setDateRange(tempCheckOut, tempCheckIn)
+    } else {
+      setDateRange(tempCheckIn, tempCheckOut)
+    }
     closeCalendar()
   }
 
@@ -117,7 +136,7 @@ export function CalendarSheet() {
         <div className="flex items-center justify-between px-6 py-4 bg-gray-50 flex-shrink-0">
           <div className="text-center">
             <div className="text-sm text-gray-500 mb-1">入住</div>
-            <div className={`text-xl font-medium ${selecting === 'checkIn' ? 'text-primary' : 'text-gray-900'}`}>
+            <div className="text-xl font-medium text-gray-900">
               {formatDisplayDate(tempCheckIn)}
             </div>
             <div className="text-sm text-gray-400">{getDateLabel(tempCheckIn)}</div>
@@ -129,7 +148,7 @@ export function CalendarSheet() {
           
           <div className="text-center">
             <div className="text-sm text-gray-500 mb-1">离店</div>
-            <div className={`text-xl font-medium ${selecting === 'checkOut' ? 'text-primary' : 'text-gray-900'}`}>
+            <div className="text-xl font-medium text-gray-900">
               {formatDisplayDate(tempCheckOut)}
             </div>
             <div className="text-sm text-gray-400">{getDateLabel(tempCheckOut)}</div>
@@ -157,7 +176,8 @@ export function CalendarSheet() {
               {/* 日期网格 */}
               <div className="grid grid-cols-7 gap-1">
                 {monthData.days.map((day) => {
-                  const selected = isSelected(day.date)
+                  const isCheckIn = isCheckInSelected(day.date)
+                  const isCheckOut = isCheckOutSelected(day.date)
                   const inRange = isInRange(day.date)
                   const label = getDateLabel(day.date)
                   
@@ -169,14 +189,14 @@ export function CalendarSheet() {
                       className={`
                         relative aspect-square flex flex-col items-center justify-center rounded-lg text-base
                         ${!day.available ? 'text-gray-300' : ''}
-                        ${selected ? 'bg-primary text-white' : ''}
+                        ${isCheckIn || isCheckOut ? 'bg-primary text-white' : ''}
                         ${inRange ? 'bg-primary/10 text-primary' : ''}
-                        ${!selected && !inRange && day.available ? 'text-gray-900 hover:bg-gray-100' : ''}
+                        ${!isCheckIn && !isCheckOut && !inRange && day.available ? 'text-gray-900 hover:bg-gray-100' : ''}
                       `}
                     >
                       <span className="font-medium text-base">{new Date(day.date).getDate()}</span>
                       {label && (
-                        <span className={`text-xs ${selected ? 'text-white/80' : 'text-gray-400'}`}>
+                        <span className={`text-xs ${isCheckIn || isCheckOut ? 'text-white/80' : 'text-gray-400'}`}>
                           {label}
                         </span>
                       )}
