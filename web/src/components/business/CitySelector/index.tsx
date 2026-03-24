@@ -8,7 +8,6 @@ interface CitySelectorProps {
 
 // 飞猪品牌色
 const brandColor = '#FFE033'
-const brandLight = '#FFF5B3'
 
 export function CitySelector({ className = '' }: CitySelectorProps) {
   const { selectedCity, hotCities, cityList, isCitySelectorOpen, openCitySelector, closeCitySelector, setSelectedCity } = useSearchStore()

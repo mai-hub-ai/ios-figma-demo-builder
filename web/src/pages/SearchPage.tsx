@@ -2,9 +2,29 @@ import { useEffect } from 'react'
 import { useSearchStore } from '@/store/searchStore'
 import { SearchArea } from '@/components/business/SearchArea'
 import { SloganBanner } from '@/components/business/SloganBanner'
+import { RecommendSection } from '@/components/business/RecommendSection'
 
 export function SearchPage() {
-  const { initPage, loading, error } = useSearchStore()
+  const { 
+    initPage, 
+    loading, 
+    error,
+    // Module 3: 筛选状态
+    sortType,
+    starLevel,
+    brandCode,
+    brandList,
+    // Module 3: 列表状态
+    packageList,
+    packageLoading,
+    packageHasMore,
+    packageError,
+    // Module 3: Actions
+    setSortType,
+    setStarLevel,
+    setBrandCode,
+    loadMorePackages,
+  } = useSearchStore()
 
   useEffect(() => {
     initPage()
@@ -37,11 +57,33 @@ export function SearchPage() {
         <p className="text-white/80 text-sm mt-1">发现精选好价，安心入住</p>
       </div>
 
-      {/* 搜索区域 */}
+      {/* Module 2: 搜索区域 */}
       <SearchArea className="mt-4" />
 
-      {/* Slogan区 */}
+      {/* Module 2: Slogan区 */}
       <SloganBanner className="mt-4" />
+
+      {/* Module 3: 推荐区域 */}
+      <div className="mt-4 rounded-t-2xl overflow-hidden">
+        <RecommendSection
+          sortType={sortType}
+          starLevel={starLevel}
+          brandCode={brandCode}
+          brandList={brandList}
+          packageList={packageList}
+          loading={packageLoading}
+          hasMore={packageHasMore}
+          error={packageError}
+          onSortChange={setSortType}
+          onStarChange={setStarLevel}
+          onBrandChange={setBrandCode}
+          onLoadMore={loadMorePackages}
+          onCardAction={(packageId) => {
+            console.log('点击套餐:', packageId)
+            // TODO: 跳转到套餐详情页
+          }}
+        />
+      </div>
 
       {/* 底部安全区 */}
       <div className="h-safe-bottom" />

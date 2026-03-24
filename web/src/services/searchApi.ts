@@ -1,5 +1,12 @@
 import axios from 'axios'
-import type { ApiResponse, SearchPageInitData, CalendarMonth } from '@/types'
+import type { 
+  ApiResponse, 
+  SearchPageInitData, 
+  CalendarMonth, 
+  Brand, 
+  PackageListResponse,
+  SortType
+} from '@/types'
 
 const api = axios.create({
   baseURL: '/api',
@@ -42,6 +49,39 @@ export function fetchHotKeywords(cityCode: string) {
 /** 获取页面配置 */
 export function fetchPageConfig() {
   return api.get<never, ApiResponse<{ sloganImageUrl: string; sloganAlt: string }>>('/search-page/config')
+}
+
+/** 获取品牌列表 */
+export function fetchBrands(cityCode: string) {
+  return api.get<never, ApiResponse<{ brands: Brand[] }>>('/brands', {
+    params: { cityCode },
+  })
+}
+
+/** 获取套餐列表 */
+export interface FetchPackagesParams {
+  cityCode: string;
+  checkInDate: string;
+  checkOutDate: string;
+  roomCount: number;
+  adultCount: number;
+  childCount: number;
+  keyword?: string;
+  sortType?: SortType;
+  starLevel?: number | null;
+  brandCode?: string | null;
+  page?: number;
+  pageSize?: number;
+}
+
+export function fetchPackages(params: FetchPackagesParams) {
+  return api.get<never, ApiResponse<PackageListResponse>>('/packages', {
+    params: {
+      ...params,
+      starLevel: params.starLevel ?? undefined,
+      brandCode: params.brandCode ?? undefined,
+    },
+  })
 }
 
 // 重新导出类型

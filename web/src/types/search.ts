@@ -71,3 +71,84 @@ export interface PriceStarFilter {
   priceRange: [number, number] | null;
   starLevels: number[];
 }
+
+// ===== Module 3: 推荐区域类型 =====
+
+/** 品牌信息 */
+export interface Brand {
+  brandCode: string;
+  brandName: string;
+  logoUrl?: string;
+}
+
+/** 排序方式 */
+export type SortType = 'sales_desc' | 'sales_asc' | 'price_asc' | 'price_desc';
+
+/** 排序选项 */
+export interface SortOption {
+  value: SortType;
+  label: string;
+}
+
+/** 星级选项 */
+export interface StarOption {
+  value: number;
+  label: string;
+}
+
+/** 筛选横条状态 */
+export interface FilterBarState {
+  sortType: SortType;
+  starLevel: number | null;
+  brandCode: string | null;
+}
+
+/** 商品卡数据 */
+export interface PackageCard {
+  // 基础信息
+  packageId: string;
+  hotelId: string;
+  hotelName: string;
+  packageTitle: string;
+  imageUrl: string;
+
+  // 评分
+  score: number;
+  highlightText: string;
+
+  // 位置
+  poiName: string;
+  distance: string;
+
+  // 标签
+  tags: string[];
+
+  // 销量
+  salesCount: number;
+
+  // 价格
+  originalPrice?: number;
+  price: number;
+  pricePrefix: string;
+  priceSuffix: string;
+}
+
+/** 商品列表响应 */
+export interface PackageListResponse {
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+  list: PackageCard[];
+}
+
+/** 商品列表状态 */
+export interface PackageListState {
+  list: PackageCard[];
+  page: number;
+  pageSize: number;
+  total: number;
+  hasMore: boolean;
+  loading: boolean;
+  error: boolean;
+}

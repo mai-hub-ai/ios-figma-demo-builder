@@ -5,12 +5,22 @@ import type {
   HotKeyword, 
   CalendarMonth, 
   SearchParams,
-  SearchPageInitData 
+  SearchPageInitData,
+  SortType,
+  PackageCard,
+  Brand,
+  PackageListResponse
 } from '@/types'
-import { fetchSearchPageInit, fetchCalendar, fetchCities } from '@/services/searchApi'
+import { 
+  fetchSearchPageInit, 
+  fetchCalendar, 
+  fetchCities,
+  fetchBrands,
+  fetchPackages
+} from '@/services/searchApi'
 
 interface SearchState {
-  // === 搜索条件 ===
+  // === Module 2: 搜索条件 ===
   selectedCity: City | null;
   keyword: string;
   checkInDate: string;
@@ -19,6 +29,20 @@ interface SearchState {
   roomCount: number;
   adultCount: number;
   childCount: number;
+
+  // === Module 3: 筛选状态 ===
+  sortType: SortType;
+  starLevel: number | null;
+  brandCode: string | null;
+
+  // === Module 3: 列表状态 ===
+  packageList: PackageCard[];
+  packagePage: number;
+  packagePageSize: number;
+  packageTotal: number;
+  packageHasMore: boolean;
+  packageLoading: boolean;
+  packageError: boolean;
 
   // === UI 状态 ===
   isCitySelectorOpen: boolean;
@@ -34,8 +58,9 @@ interface SearchState {
   calendarData: CalendarMonth[];
   sloganImageUrl: string;
   sloganAlt: string;
+  brandList: Brand[];
 
-  // === Actions ===
+  // === Actions: Module 2 ===
   initPage: () => Promise<void>;
   setSelectedCity: (city: City) => void;
   setKeyword: (keyword: string) => void;
@@ -48,6 +73,15 @@ interface SearchState {
   openGuestPicker: () => void;
   closeGuestPicker: () => void;
 
+  // === Actions: Module 3 ===
+  setSortType: (sortType: SortType) => void;
+  setStarLevel: (starLevel: number | null) => void;
+  setBrandCode: (brandCode: string | null) => void;
+  loadBrands: () => Promise<void>;
+  loadPackages: (isReset?: boolean) => Promise<void>;
+  loadMorePackages: () => Promise<void>;
+  resetFilters: () => void;
+
   getSearchParams: () => SearchParams;
   resetSearch: () => void;
 }
@@ -59,6 +93,7 @@ const getDefaultDates = () => {
   tomorrow.setDate(tomorrow.getDate() + 1)
   
   const formatDate = (d: Date) => d.toISOString().split('T')[0]
+  
   return {
     checkIn: formatDate(today),
     checkOut: formatDate(tomorrow),
@@ -78,6 +113,20 @@ export const useSearchStore = create<SearchState>()(
       adultCount: 2,
       childCount: 0,
 
+      // Module 3: 筛选状态
+      sortType: 'sales_desc',
+      starLevel: null,
+      brandCode: null,
+
+      // Module 3: 列表状态
+      packageList: [],
+      packagePage: 1,
+      packagePageSize: 10,
+      packageTotal: 0,
+      packageHasMore: true,
+      packageLoading: false,
+      packageError: false,
+
       isCitySelectorOpen: false,
       isCalendarOpen: false,
       isGuestPickerOpen: false,
@@ -90,8 +139,9 @@ export const useSearchStore = create<SearchState>()(
       calendarData: [],
       sloganImageUrl: '',
       sloganAlt: '',
+      brandList: [],
 
-      // === Actions ===
+      // === Actions: Module 2 ===
       initPage: async () => {
         set({ loading: true, error: null })
         try {
@@ -100,7 +150,7 @@ export const useSearchStore = create<SearchState>()(
           const data: SearchPageInitData = res.data
           
           set({
-            cityList: data.hotCities, // 简化：使用热门城市作为可选列表
+            cityList: data.hotCities,
             hotCities: data.hotCities,
             hotKeywords: data.hotKeywords,
             sloganImageUrl: data.sloganImageUrl,
@@ -110,6 +160,10 @@ export const useSearchStore = create<SearchState>()(
             checkOutDate: data.defaultCheckOut,
             loading: false,
           })
+
+          // 加载品牌列表和首屏商品
+          await get().loadBrands()
+          await get().loadPackages(true)
         } catch {
           set({ error: '加载失败，请重试', loading: false })
         }
@@ -134,7 +188,6 @@ export const useSearchStore = create<SearchState>()(
       openCitySelector: async () => {
         set({ isCitySelectorOpen: true, loading: true })
         try {
-          // 加载所有城市列表
           const res = await fetchCities()
           set({ 
             cityList: res.data.cities,
@@ -162,6 +215,88 @@ export const useSearchStore = create<SearchState>()(
       openGuestPicker: () => set({ isGuestPickerOpen: true }),
       closeGuestPicker: () => set({ isGuestPickerOpen: false }),
 
+      // === Actions: Module 3 ===
+      setSortType: (sortType) => {
+        set({ sortType })
+        get().loadPackages(true)
+      },
+
+      setStarLevel: (starLevel) => {
+        set({ starLevel })
+        get().loadPackages(true)
+      },
+
+      setBrandCode: (brandCode) => {
+        set({ brandCode })
+        get().loadPackages(true)
+      },
+
+      loadBrands: async () => {
+        try {
+          const cityCode = get().selectedCity?.cityCode || 'SHA'
+          const res = await fetchBrands(cityCode)
+          set({ brandList: res.data.brands })
+        } catch {
+          // 静默失败，使用空列表
+        }
+      },
+
+      loadPackages: async (isReset = false) => {
+        const state = get()
+        if (state.packageLoading) return
+
+        set({ 
+          packageLoading: true, 
+          packageError: false,
+          ...(isReset ? { packagePage: 1, packageList: [] } : {})
+        })
+
+        try {
+          const page = isReset ? 1 : state.packagePage
+          const res = await fetchPackages({
+            cityCode: state.selectedCity?.cityCode || 'SHA',
+            checkInDate: state.checkInDate,
+            checkOutDate: state.checkOutDate,
+            roomCount: state.roomCount,
+            adultCount: state.adultCount,
+            childCount: state.childCount,
+            keyword: state.keyword,
+            sortType: state.sortType,
+            starLevel: state.starLevel,
+            brandCode: state.brandCode,
+            page,
+            pageSize: state.packagePageSize,
+          })
+
+          const data: PackageListResponse = res.data
+
+          set({
+            packageList: isReset ? data.list : [...state.packageList, ...data.list],
+            packagePage: page + 1,
+            packageTotal: data.total,
+            packageHasMore: data.hasMore,
+            packageLoading: false,
+          })
+        } catch {
+          set({ packageError: true, packageLoading: false })
+        }
+      },
+
+      loadMorePackages: async () => {
+        const state = get()
+        if (!state.packageHasMore || state.packageLoading || state.packageError) return
+        await get().loadPackages(false)
+      },
+
+      resetFilters: () => {
+        set({
+          sortType: 'sales_desc',
+          starLevel: null,
+          brandCode: null,
+        })
+        get().loadPackages(true)
+      },
+
       getSearchParams: (): SearchParams => {
         const state = get()
         return {
@@ -187,6 +322,12 @@ export const useSearchStore = create<SearchState>()(
           roomCount: 1,
           adultCount: 2,
           childCount: 0,
+          sortType: 'sales_desc',
+          starLevel: null,
+          brandCode: null,
+          packageList: [],
+          packagePage: 1,
+          packageHasMore: true,
         })
       },
     }),
