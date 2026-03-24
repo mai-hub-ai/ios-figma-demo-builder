@@ -87,15 +87,15 @@ export function CitySelector({ className = '' }: CitySelectorProps) {
 
   return (
     <div className={`relative flex-shrink-0 ${className}`}>
-      {/* 城市选择器触发器 - 宽度自适应，文字不换行 */}
+      {/* 城市选择器触发器 - 无框线 */}
       <button
         onClick={openCitySelector}
-        className="flex items-center gap-1 px-3 py-2 bg-white rounded-lg border border-gray-200 whitespace-nowrap"
+        className="flex items-center gap-1 whitespace-nowrap"
         style={{ height: 50 }}
       >
         <span 
           className="font-medium text-gray-900 truncate"
-          style={{ fontSize: 18, maxWidth: 120 }} // 放宽宽度，最大120px，超出截断
+          style={{ fontSize: 18, maxWidth: 120 }}
           title={selectedCity?.cityName}
         >
           {truncateCityName(selectedCity?.cityName || '选择')}

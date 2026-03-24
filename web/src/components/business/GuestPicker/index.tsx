@@ -10,13 +10,13 @@ export function GuestPicker({ className = '' }: GuestPickerProps) {
   return (
     <button
       onClick={openGuestPicker}
-      className={`flex items-center justify-between w-full bg-white rounded-lg border border-gray-200 px-3 ${className}`}
-      style={{ height: 42 }} // Figma 84px减半
+      className={`flex items-center justify-between w-full px-3 ${className}`}
+      style={{ height: 42 }}
     >
       {/* 人数显示 - 字号按经验适配，始终显示儿童数 */}
       <span 
         className="flex-1 text-left text-gray-900"
-        style={{ fontSize: 16 }} // Figma 32px减半
+        style={{ fontSize: 16 }}
       >
         {roomCount}间房 {adultCount}成人 {childCount}儿童
       </span>

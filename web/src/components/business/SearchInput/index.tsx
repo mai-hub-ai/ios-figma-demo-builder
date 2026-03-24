@@ -14,13 +14,13 @@ export function SearchInput({ className = '' }: SearchInputProps) {
   return (
     <div className={`relative flex-1 ${className}`}>
       <div 
-        className="flex items-center bg-white rounded-lg border border-gray-200 px-3"
+        className="flex items-center px-3"
         style={{ height: 50 }}
       >
         {/* 搜索图标 - 根据文案大小自适应 */}
         <svg 
           className="text-gray-400 flex-shrink-0" 
-          style={{ width: 18, height: 18 }} // 图标大小跟随字号18px
+          style={{ width: 18, height: 18 }}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -28,14 +28,14 @@ export function SearchInput({ className = '' }: SearchInputProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         
-        {/* 输入框 - Figma字号减半适配 */}
+        {/* 输入框 - 无框线 */}
         <input
           type="text"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           placeholder="位置/品牌/酒店"
-          className="flex-1 ml-2 text-gray-900 placeholder-gray-400 focus:outline-none"
-          style={{ fontSize: 16 }} // Figma 32pt减半为16px
+          className="flex-1 ml-2 text-gray-900 placeholder-gray-400 focus:outline-none bg-transparent"
+          style={{ fontSize: 16 }}
         />
         
         {/* 清除按钮 */}
@@ -43,7 +43,7 @@ export function SearchInput({ className = '' }: SearchInputProps) {
           <button onClick={handleClear} className="flex-shrink-0 p-1">
             <svg 
               className="text-gray-400" 
-              style={{ width: 16, height: 16 }} // 清除图标稍小
+              style={{ width: 16, height: 16 }}
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"

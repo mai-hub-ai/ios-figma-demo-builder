@@ -12,25 +12,25 @@ interface SearchAreaProps {
 
 export function SearchArea({ className = '' }: SearchAreaProps) {
   return (
-    <div className={`bg-white rounded-xl mx-4 p-4 shadow-sm ${className}`}>
+    <div className={`bg-white rounded-xl p-4 shadow-sm ${className}`}>
       {/* 第一行：城市选择 + 搜索输入框 */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
         <CitySelector />
         <SearchInput />
       </div>
 
       {/* 第二行：日期选择 */}
-      <div className="mb-3">
+      <div className="py-3 border-b border-gray-100">
         <DatePicker />
       </div>
 
-      {/* 第三行：人数选择（价格/星级占位） */}
-      <div className="mb-3">
+      {/* 第三行：人数选择 */}
+      <div className="py-3 border-b border-gray-100">
         <GuestPicker />
       </div>
 
       {/* 热搜词 */}
-      <div className="mb-4">
+      <div className="pt-3 mb-2">
         <HotKeywords />
       </div>
 
