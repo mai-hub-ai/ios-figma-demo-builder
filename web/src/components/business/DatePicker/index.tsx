@@ -38,9 +38,9 @@ export function DatePicker({ className = '' }: DatePickerProps) {
   return (
     <button 
       onClick={openCalendar}
-      className={`flex items-center justify-between w-full bg-white rounded-lg border border-gray-200 px-3 py-2 ${className}`}
+      className={`flex items-center w-full bg-white rounded-lg border border-gray-200 px-3 py-2 ${className}`}
     >
-      {/* 入住日期 - 居左 */}
+      {/* 入住日期 */}
       <div className="flex items-baseline">
         {/* 月 - 24px (大号) */}
         <span 
@@ -81,10 +81,10 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         )}
       </div>
 
-      {/* 间隔晚数 - 椭圆框 */}
-      <div className="flex items-center justify-center">
+      {/* 间隔晚数 - 椭圆框，紧挨着日期 */}
+      <div className="flex items-center ml-2">
         <div 
-          className="flex items-center justify-center px-3 py-0.5 border border-gray-300 rounded-full"
+          className="flex items-center justify-center px-2 py-0.5 border border-gray-300 rounded-full"
         >
           <span 
             className="text-[14px] font-normal leading-[140%] tracking-normal text-gray-600"
@@ -95,8 +95,8 @@ export function DatePicker({ className = '' }: DatePickerProps) {
         </div>
       </div>
 
-      {/* 离店日期 - 居右 */}
-      <div className="flex items-baseline">
+      {/* 离店日期 - 紧挨着1晚 */}
+      <div className="flex items-baseline ml-2">
         {/* 月 - 24px (大号) */}
         <span 
           className="text-[24px] font-normal leading-none tracking-normal"
