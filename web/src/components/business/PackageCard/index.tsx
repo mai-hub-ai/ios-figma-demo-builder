@@ -5,9 +5,8 @@ interface PackageCardProps {
   onActionClick?: (packageId: string) => void;
 }
 
-// 飞猪品牌色
-const BRAND_COLOR = '#FFE033';
 const INDIGO_COLOR = '#6666FF';
+const PAY_COLOR = '#FF5533'; // --color_pay_1
 
 // 销量模糊化
 function formatSalesCount(count: number): string {
@@ -32,16 +31,16 @@ export function PackageCard({ data, onActionClick }: PackageCardProps) {
   const salesText = formatSalesCount(data.salesCount);
 
   return (
-    <div 
+    <div
       className="bg-white overflow-hidden shadow-sm flex"
-      style={{ 
-        width: '100%', 
+      style={{
+        width: '100%',
         height: 'auto',
         minHeight: '180px',
-        borderRadius: '16px 16px 16px 16px'
+        borderRadius: '16px',
       }}
     >
-      {/* 左侧图片 - Figma 750÷2=375, 图片约占1/3 */}
+      {/* 左侧图片 */}
       <div className="flex-shrink-0" style={{ width: '120px', height: '150px' }}>
         <img
           src={data.imageUrl}
@@ -52,14 +51,12 @@ export function PackageCard({ data, onActionClick }: PackageCardProps) {
       </div>
 
       {/* 右侧内容区域 */}
-      <div className="flex-1 p-3 flex flex-col justify-between">
-        {/* 上部：酒店名称、套餐标题 */}
+      <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
+        {/* 上部：酒店名称 + 套餐标题同行 */}
         <div>
-          <h3 className="text-base font-semibold text-gray-900 truncate mb-1">
+          <p className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2 leading-snug">
             {data.hotelName}
-          </h3>
-          <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-            {data.packageTitle}
+            <span className="font-normal text-gray-600"> {data.packageTitle}</span>
           </p>
         </div>
 
@@ -67,14 +64,18 @@ export function PackageCard({ data, onActionClick }: PackageCardProps) {
         <div>
           {/* 评分与亮点 */}
           {data.score > 0 && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-xs font-medium" style={{ color: INDIGO_COLOR }}>
+            <div className="flex items-center gap-1 mb-1 min-w-0">
+              <span className="text-xs font-medium flex-shrink-0" style={{ color: INDIGO_COLOR }}>
                 {data.score.toFixed(1)}分
               </span>
               {data.highlightText && (
-                <span 
-                  className="text-xs px-2 py-0.5 rounded-full truncate max-w-[100px]"
-                  style={{ backgroundColor: `${INDIGO_COLOR}15`, color: INDIGO_COLOR }}
+                <span
+                  className="text-xs px-2 py-0.5 rounded-full truncate"
+                  style={{
+                    backgroundColor: `${INDIGO_COLOR}15`,
+                    color: INDIGO_COLOR,
+                    maxWidth: 'calc(100% - 8px)',
+                  }}
                 >
                   {data.highlightText}
                 </span>
@@ -84,14 +85,14 @@ export function PackageCard({ data, onActionClick }: PackageCardProps) {
 
           {/* 位置距离 */}
           <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <span className="truncate">近{data.poiName} {data.distance}</span>
           </div>
 
-          {/* 优势标签 - 只显示2个 */}
+          {/* 优势标签 */}
           {data.tags.length > 0 && (
             <div className="flex items-center gap-1 mb-1 overflow-hidden">
               {data.tags.slice(0, 2).map((tag, index) => (
@@ -115,16 +116,16 @@ export function PackageCard({ data, onActionClick }: PackageCardProps) {
         {/* 底部：价格和按钮 */}
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-baseline gap-0.5">
-            <span className="text-xs text-gray-500">{data.pricePrefix}</span>
-            <span className="text-sm text-gray-900">¥</span>
-            <span className="text-xl font-bold text-gray-900">{data.price}</span>
-            <span className="text-xs text-gray-500">{data.priceSuffix}</span>
+            <span className="text-xs" style={{ color: PAY_COLOR }}>{data.pricePrefix}</span>
+            <span className="text-sm font-medium" style={{ color: PAY_COLOR }}>¥</span>
+            <span className="text-xl font-bold" style={{ color: PAY_COLOR }}>{data.price}</span>
+            <span className="text-xs" style={{ color: PAY_COLOR }}>{data.priceSuffix}</span>
           </div>
 
           <button
             onClick={() => onActionClick?.(data.packageId)}
-            className="px-4 py-2 rounded-full text-sm font-medium"
-            style={{ backgroundColor: BRAND_COLOR, color: '#202124' }}
+            className="px-4 py-2 rounded-full text-sm font-medium text-white"
+            style={{ backgroundColor: PAY_COLOR }}
           >
             立即抢
           </button>
