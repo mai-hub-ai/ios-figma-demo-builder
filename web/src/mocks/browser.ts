@@ -1,5 +1,6 @@
 import { setupWorker } from 'msw/browser'
-import { handlers } from './handlers'
 import { searchHandlers } from './searchHandlers'
+import { handlers } from './handlers'
 
-export const worker = setupWorker(...handlers, ...searchHandlers)
+// searchHandlers 优先注册，确保 /api/packages 列表路由被正确匹配
+export const worker = setupWorker(...searchHandlers, ...handlers)

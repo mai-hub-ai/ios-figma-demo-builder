@@ -1,72 +1,17 @@
 import { http, HttpResponse, delay } from 'msw'
 import {
-  generateMockPackages,
   generateMockPackage,
   generateDateAvailability,
 } from '@/services/mockData'
 import type { Order } from '@/types'
 import { faker } from '@faker-js/faker/locale/zh_CN'
 
-// 缓存生成的套餐数据，保证详情页和列表页数据一致
-let cachedPackages = generateMockPackages(20)
-
 export const handlers = [
-  // GET /api/packages - 获取套餐列表
-  http.get('/api/packages', async ({ request }) => {
-    await delay(300)
-    const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page') || '1')
-    const pageSize = parseInt(url.searchParams.get('pageSize') || '10')
-    const keyword = url.searchParams.get('keyword') || ''
-    const sortBy = url.searchParams.get('sortBy') || 'sales'
-
-    let filtered = [...cachedPackages]
-
-    // 关键词筛选
-    if (keyword) {
-      filtered = filtered.filter(
-        p => p.title.includes(keyword) || p.hotelName.includes(keyword)
-      )
-    }
-
-    // 排序
-    switch (sortBy) {
-      case 'price_asc':
-        filtered.sort((a, b) => a.priceInfo.currentPrice - b.priceInfo.currentPrice)
-        break
-      case 'price_desc':
-        filtered.sort((a, b) => b.priceInfo.currentPrice - a.priceInfo.currentPrice)
-        break
-      case 'rating':
-        filtered.sort((a, b) => b.rating - a.rating)
-        break
-      case 'sales':
-      default:
-        filtered.sort((a, b) => b.salesCount - a.salesCount)
-        break
-    }
-
-    const start = (page - 1) * pageSize
-    const list = filtered.slice(start, start + pageSize)
-
-    return HttpResponse.json({
-      code: 200,
-      message: 'success',
-      data: {
-        list,
-        total: filtered.length,
-        page,
-        pageSize,
-      },
-    })
-  }),
-
   // GET /api/packages/:id - 获取套餐详情
   http.get('/api/packages/:id', async ({ params }) => {
     await delay(200)
-    const { id } = params
-    const pkg = cachedPackages.find(p => p.id === id) || generateMockPackage({ id: id as string })
-
+    const { id: _id } = params
+    const pkg = generateMockPackage({ id: _id as string })
     return HttpResponse.json({
       code: 200,
       message: 'success',
@@ -79,12 +24,8 @@ export const handlers = [
     await delay(200)
     const url = new URL(request.url)
     const month = url.searchParams.get('month') || '2026-04'
-    const { id } = params
-    const pkg = cachedPackages.find(p => p.id === id)
-    const basePrice = pkg?.priceInfo.currentPrice || 999
-
-    const availability = generateDateAvailability(`${month}-01`, 30, basePrice)
-
+    const { id: _id } = params
+    const availability = generateDateAvailability(`${month}-01`, 30, 999)
     return HttpResponse.json({
       code: 200,
       message: 'success',
@@ -96,8 +37,7 @@ export const handlers = [
   http.post('/api/orders', async ({ request }) => {
     await delay(500)
     const body = await request.json() as Record<string, unknown>
-    const pkg = cachedPackages.find(p => p.id === body.packageId) || generateMockPackage()
-
+    const pkg = generateMockPackage()
     const order: Order = {
       id: faker.string.uuid(),
       orderNo: faker.string.numeric(16),
