@@ -61,8 +61,8 @@ export function PackageCardList({
 
   return (
     <div className="px-4 py-4">
-      {/* 双列网格布局 */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 单列布局 */}
+      <div className="flex flex-col gap-3">
         {list.map((item) => (
           <PackageCard
             key={item.packageId}
