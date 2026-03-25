@@ -28,7 +28,7 @@ const STAR_OPTIONS: StarOption[] = [
 ];
 
 // 飞猪品牌色
-const BRAND_COLOR = '#FFE033';
+const BRAND_COLOR = '#FF9500'; // 橙色
 
 export function FilterBar({
   sortType,
@@ -99,23 +99,23 @@ export function FilterBar({
     setOpenDropdown(null);
   };
 
-  // 筛选项按钮样式
-  const getFilterButtonStyle = (isActive: boolean) => ({
-    color: isActive ? BRAND_COLOR : '#666',
-  });
+  // 判断筛选项是否激活
+  const isSortActive = sortType !== 'sales_desc';
+  const isStarActive = !!starLevel;
+  const isBrandActive = !!brandCode;
 
   return (
-    <div className="flex items-center gap-4 px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-10">
+    <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-10">
       {/* 销量排序 */}
-      <div ref={sortRef} className="relative">
+      <div ref={sortRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
           className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={getFilterButtonStyle(sortType !== 'sales_desc')}
+          style={{ color: isSortActive ? BRAND_COLOR : '#666' }}
         >
-          <span className="truncate max-w-[80px]">{getSortLabel()}</span>
+          <span className="truncate max-w-[100px]">{getSortLabel()}</span>
           <svg 
-            className="w-4 h-4 transition-transform" 
+            className="w-4 h-4 transition-transform flex-shrink-0" 
             style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none" 
             stroke="currentColor" 
@@ -126,7 +126,7 @@ export function FilterBar({
         </button>
         
         {openDropdown === 'sort' && (
-          <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[140px]">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[140px]">
             {SORT_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -142,15 +142,15 @@ export function FilterBar({
       </div>
 
       {/* 酒店星级 */}
-      <div ref={starRef} className="relative">
+      <div ref={starRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'star' ? null : 'star')}
           className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={getFilterButtonStyle(!!starLevel)}
+          style={{ color: isStarActive ? BRAND_COLOR : '#666' }}
         >
-          <span className="truncate max-w-[80px]">{getStarLabel()}</span>
+          <span className="truncate max-w-[100px]">{getStarLabel()}</span>
           <svg 
-            className="w-4 h-4 transition-transform" 
+            className="w-4 h-4 transition-transform flex-shrink-0" 
             style={{ transform: openDropdown === 'star' ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none" 
             stroke="currentColor" 
@@ -161,7 +161,7 @@ export function FilterBar({
         </button>
         
         {openDropdown === 'star' && (
-          <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[120px]">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[120px]">
             {starLevel && (
               <button
                 onClick={() => handleStarSelect(null)}
@@ -185,15 +185,15 @@ export function FilterBar({
       </div>
 
       {/* 酒店品牌 */}
-      <div ref={brandRef} className="relative">
+      <div ref={brandRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'brand' ? null : 'brand')}
           className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={getFilterButtonStyle(!!brandCode)}
+          style={{ color: isBrandActive ? BRAND_COLOR : '#666' }}
         >
-          <span className="truncate max-w-[80px]">{getBrandLabel()}</span>
+          <span className="truncate max-w-[100px]">{getBrandLabel()}</span>
           <svg 
-            className="w-4 h-4 transition-transform" 
+            className="w-4 h-4 transition-transform flex-shrink-0" 
             style={{ transform: openDropdown === 'brand' ? 'rotate(180deg)' : 'rotate(0deg)' }}
             fill="none" 
             stroke="currentColor" 
@@ -204,7 +204,7 @@ export function FilterBar({
         </button>
         
         {openDropdown === 'brand' && (
-          <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[120px] max-h-[300px] overflow-y-auto">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-2 min-w-[120px] max-h-[300px] overflow-y-auto">
             {brandCode && (
               <button
                 onClick={() => handleBrandSelect(null)}
