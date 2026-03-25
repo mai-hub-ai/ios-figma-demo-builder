@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchStore } from '@/store/searchStore'
 import { SearchArea } from '@/components/business/SearchArea'
-import { SloganBanner } from '@/components/business/SloganBanner'
 import { RecommendSection } from '@/components/business/RecommendSection'
 
 export function SearchPage() {
@@ -47,7 +46,7 @@ export function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1A73E8] to-[#4285F4]">
+    <div style={{ minHeight: "100vh", background: "linear-gradient(to bottom, #1A73E8 0%, #F2F3F5 33%, #F2F3F5 100%)" }}>
       {/* 状态栏占位 */}
       <div className="h-safe-top" />
       
@@ -60,11 +59,8 @@ export function SearchPage() {
       {/* Module 2: 搜索区域 */}
       <SearchArea className="mt-4" />
 
-      {/* Module 2: Slogan区 */}
-      <SloganBanner className="mt-4" />
-
       {/* Module 3: 推荐区域 */}
-      <div className="mt-4 rounded-t-2xl overflow-hidden">
+      <div className="mt-2 rounded-t-2xl overflow-hidden">
         <RecommendSection
           sortType={sortType}
           starLevel={starLevel}
