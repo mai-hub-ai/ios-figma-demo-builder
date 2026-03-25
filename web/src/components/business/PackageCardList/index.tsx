@@ -60,7 +60,7 @@ export function PackageCardList({
   }
 
   return (
-    <div className="px-4 py-4">
+    <div className="px-2 py-3">
       {/* 单列布局 */}
       <div className="flex flex-col gap-3">
         {list.map((item) => (

@@ -110,8 +110,8 @@ export function FilterBar({
       <div ref={sortRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
-          className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={{ color: isSortActive ? BRAND_COLOR : '#666' }}
+          className="flex items-center gap-1 font-medium whitespace-nowrap"
+          style={{ color: isSortActive ? BRAND_COLOR : '#666', fontSize: '15px' }}
         >
           <span className="truncate max-w-[100px]">{getSortLabel()}</span>
           <svg 
@@ -145,8 +145,8 @@ export function FilterBar({
       <div ref={starRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'star' ? null : 'star')}
-          className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={{ color: isStarActive ? BRAND_COLOR : '#666' }}
+          className="flex items-center gap-1 font-medium whitespace-nowrap"
+          style={{ color: isStarActive ? BRAND_COLOR : '#666', fontSize: '15px' }}
         >
           <span className="truncate max-w-[100px]">{getStarLabel()}</span>
           <svg 
@@ -188,8 +188,8 @@ export function FilterBar({
       <div ref={brandRef} className="relative flex-1 flex justify-center">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'brand' ? null : 'brand')}
-          className="flex items-center gap-1 text-sm font-medium whitespace-nowrap"
-          style={{ color: isBrandActive ? BRAND_COLOR : '#666' }}
+          className="flex items-center gap-1 font-medium whitespace-nowrap"
+          style={{ color: isBrandActive ? BRAND_COLOR : '#666', fontSize: '15px' }}
         >
           <span className="truncate max-w-[100px]">{getBrandLabel()}</span>
           <svg 
